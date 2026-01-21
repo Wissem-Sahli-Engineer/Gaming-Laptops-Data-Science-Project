@@ -122,6 +122,31 @@ df2['Garentie'] = df2['Garentie'].fillna(0).astype(int)
 
 df2['GPU'] = df2['GPU'].replace('RTX 3050 4', 'RTX 3050')
 
+# Adding brand column
+
+def extract_brand(name):
+    name_lower = str(name).lower()
+    if 'msi' in name_lower:
+        return 'MSI'
+    elif 'lenovo' in name_lower:
+        return 'Lenovo'
+    elif 'asus' in name_lower:
+        return 'ASUS'
+    elif 'hp' in name_lower or 'victus' in name_lower:
+        return 'HP'
+    elif 'dell' in name_lower:
+        return 'Dell'
+    elif 'acer' in name_lower:
+        return 'Acer'
+    elif 'gigabyte' in name_lower:
+        return 'Gigabyte'
+    elif 'razer' in name_lower:
+        return 'Razer'
+    else:
+        return str(name).split()[0] if len(str(name).split()) > 0 else 'Unknown'
+
+df2['Brand'] = df2['Name'].apply(extract_brand)
+
 print("\nSaving updated gaming_laptops2.csv...")
 df2.to_csv("gaming_laptops2_cleaned.csv", index=False)
 print("Done! Saved to 'gaming_laptops2_cleaned.csv'")

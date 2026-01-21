@@ -1,0 +1,163 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0f0f23;
+    color: #ffffff;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f0f23;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #8b5cf6;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7c3aed;
+}
+
+/* Dashboard Container */
+.dashboard-container {
+    padding: 20px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Typography */
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #8b5cf6;
+}
+
+h2 {
+    font-size: 2.25rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+p {
+    font-size: 1.125rem;
+    opacity: 0.8;
+}
+
+/* Layout Grid System */
+.header-section {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.charts-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.charts-grid-full {
+    margin-bottom: 1.5rem;
+}
+
+/* Card Components */
+.card {
+    background-color: #1a1a2e;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    /* Prevent infinite growth loop */
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.card-auto {
+    background-color: #1a1a2e;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.metric-card {
+    background-color: #1a1a2e;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent;
+    transition: transform 0.2s;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+}
+
+/* Graph Styling fix */
+.js-plotly-plot {
+    flex-grow: 1;
+}
+
+/* Dash Dropdown Dark Mode Overrides */
+.Select-control {
+    background-color: #1a1a2e !important;
+    border-color: #374151 !important;
+    color: white !important;
+}
+
+.Select-menu-outer {
+    background-color: #1a1a2e !important;
+    border: 1px solid #374151 !important;
+}
+
+.Select-value-label {
+    color: white !important;
+}
+
+.Select-input>input {
+    color: white !important;
+}
+
+.Select-placeholder {
+    color: #9ca3af !important;
+}
+
+.Select-arrow-zone {
+    color: #9ca3af !important;
+}
+
+.VirtualizedSelectOption {
+    color: white !important;
+    background-color: #1a1a2e !important;
+}
+
+.VirtualizedSelectFocusedOption {
+    background-color: #374151 !important;
+}
