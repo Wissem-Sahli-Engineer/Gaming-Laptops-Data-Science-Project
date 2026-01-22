@@ -7,6 +7,7 @@ from sklearn.ensemble import RandomForestRegressor
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import GradientBoostingRegressor
 
 df = pd.read_csv("gaming_laptops2_cleaned.csv")
 
@@ -72,12 +73,19 @@ r2 = r2_score(y_test, lr_preds)
 print(f"Average Error - Mean Absolute Error (MAE): {mae}")
 print(f"Model Accuracy (R2 Score): {r2}")
 
-# Random Forest is usually much more accurate for tech specs
+# Random Forest (usually much more accurate for tech specs)
 rf_model = RandomForestRegressor(n_estimators=200, random_state=42)
 rf_model.fit(X_train, y_train)
 
 rf_preds = rf_model.predict(X_test)
 print(f"Random Forest MAE: {mean_absolute_error(y_test, rf_preds):.2f} DT")
+
+# Gradient Boosting
+gb_model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3)
+gb_model.fit(X_train, y_train)
+gb_preds = gb_model.predict(X_test)
+
+print(f"Gradient Boosting MAE: {mean_absolute_error(y_test, gb_preds):.2f}")
 
 '''
 # See which specs (GPU, RAM, etc.) impact the price the most
@@ -92,9 +100,10 @@ df.boxplot(column='Price', by='Brand')
 plt.show()
 '''
 
+''' PRICE OUTLIERS 
 # 1. Calculate Q1 (25th percentile) and Q3 (75th percentile)
-Q1 = df['Price'].quantile(0.25)
-Q3 = df['Price'].quantile(0.75)
+Q1 = df_model['Price'].quantile(0.25)
+Q3 = df_model['Price'].quantile(0.75)
 
 # 2. Calculate the Interquartile Range (IQR)
 IQR = Q3 - Q1
@@ -105,9 +114,53 @@ lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 
 # 4. Filter the data
-df_cleaned = df[(df['Price'] >= lower_bound) & (df['Price'] <= upper_bound)]
+df_cleaned = df_model[(df_model['Price'] >= lower_bound) & (df_model['Price'] <= upper_bound)]
 
-print(f"Original rows: {len(df)}")
+print(f"Original rows: {len(df_model)}")
 print(f"Rows after removing outliers: {len(df_cleaned)}")
+'''
+df_cleaned = df_model.copy()
+df_cleaned['Price'] = np.log1p(df_cleaned['Price'])
+
+df_cleaned_model = df_cleaned[['Brand', 'CPU', 'GPU', 'RAM_GB', 'Storage_GB', 'Price', 'Garentie']].copy()
 
 
+df_cleaned_dummy = pd.get_dummies(df_cleaned_model, columns=['Brand', 'CPU', 'GPU'],drop_first=True)
+
+# train test split 
+
+X= df_cleaned_dummy.drop('Price', axis=1)
+y= df_cleaned_dummy['Price']
+
+X_train, X_test, y_train, y_test = train_test_split (X , y , test_size = 0.20 , random_state = 42 ) 
+
+# Initialize the Linear Regression model
+model = LinearRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# When evaluating the model:
+predictions_log = model.predict(X_test)
+predictions_actual = np.expm1(predictions_log) # Reverse the log
+y_test_actual = np.expm1(y_test)               # Reverse the log
+r2 = r2_score(y_test_actual, predictions_actual)
+# Now calculate the real MAE in Dinars
+print(f"Real World MAE: {mean_absolute_error(y_test_actual, predictions_actual):.2f} DT")
+
+
+print(f"Model Accuracy (R2 Score): {r2}")
+
+# Get the coefficients from your best model
+importance = pd.DataFrame({
+    'Feature': X.columns,
+    'Weight': model.coef_
+}).sort_values(by='Weight', ascending=False)
+
+# top 10 things that INCREASE price
+print("Top 10 Price Drivers in Tunisia:")
+print(importance.head(10))
+
+# top 10 things that DECREASE price
+print("Top 10 Price Drivers in Tunisia:")
+print(importance.tail(10))

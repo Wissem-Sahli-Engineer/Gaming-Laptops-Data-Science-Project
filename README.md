@@ -92,14 +92,19 @@ Data cleaning was performed to improve data quality and consistency.
 
 ---
 
-## 📊 3. Exploratory Data Analysis (EDA)
+## 📊 3.4. Exploratory Data Analysis (EDA)
 
 EDA was conducted using:
-- Matplotlib
-- Seaborn
-- Pandas built-in functions
+1- PowerBI
+2- Dash and Plotly
+3- Python libraries : 
+  - Matplotlib
+  - Seaborn
+  - Pandas built-in functions
 
 ### Visualizations:
+I used PowerBI to create the dashboard, because it is more user-friendly and it is easier to create interactive dashboards ! And i have created an interactive dashboard using Dash and Plotly. Some of the visualizations are:
+
 - Price distribution
 - Price vs GPU
 - Price vs Storage
@@ -123,21 +128,61 @@ were used for quick statistical insights.
 
 ---
 
-## 📈 4. Dashboard (Dash)
+## 📊 5. Machine Learning Model
 
-An interactive dashboard was built using **Dash and Plotly** to:
-- Visualize key insights in one place
-- Improve comparison between features
-- Prepare the project for deployment
+## 🤖 5. Machine Learning & Price Prediction
+
+In this phase, I developed a predictive model to estimate gaming laptop prices in the Tunisian market. The goal was to transform technical specifications into a reliable price valuation tool.
+
+### 🛠️ Modeling Workflow
+My code implements a robust pipeline to handle categorical text data and non-linear price distributions:
+
+1.  **Feature Engineering:** * Converted **RAM** and **Storage** strings into numeric integers.
+    * Extracted **Brand** names using a custom mapping function.
+    * Converted **Availability** into a binary format (1 for "En stock", 0 for others).
+2.  **Categorical Encoding:** Applied `pd.get_dummies` with `drop_first=True` to the **Brand, CPU, and GPU** columns. This created a high-dimensional numeric matrix suitable for regression.
+3.  **Target Optimization:** To address the right-skewed nature of laptop prices, I applied a **Log Transformation** (`np.log1p`) to the Price. This stabilized the model and significantly reduced error margins.
+
+### 📊 Model Comparison & Results
+I evaluated three different algorithms to find the best fit for this dataset:
+
+| Model | MAE (Mean Absolute Error) | R² Score (Accuracy) |
+| :--- | :--- | :--- |
+| **Linear Regression (Baseline)** | 312.38 DT | 0.8301 |
+| **Random Forest** | 347.43 DT | - |
+| **Gradient Boosting** | 432.30 DT | - |
+| **Optimized Linear Regression (Log)** | **259.49 DT** | **0.8647** |
+
+
+
+### 📈 Final Output Analysis
+The optimized model achieved an **86.47% accuracy**, meaning it explains nearly 87% of the price variations on the website.
+
+#### Top 5 Price Drivers (Highest Positive Impact)
+These features add the most value to a laptop's price in Tunisia:
+1.  **GPU: RTX 5090** (Weight: 1.08)
+2.  **GPU: RTX 5080** (Weight: 0.85)
+3.  **CPU: Intel Core i9-14900HX** (Weight: 0.80)
+4.  **GPU: RTX 4090** (Weight: 0.80)
+5.  **CPU: Intel Core I7-13650HX** (Weight: 0.61)
+
+#### Top 5 Value Indicators (Highest Negative Impact)
+Features that signify entry-level or budget-friendly pricing:
+1.  **GPU: RTX 2050** (Weight: -0.23)
+2.  **Brand: LENOVO** (Weight: -0.18)
+3.  **GPU: RTX 3050** (Weight: -0.10)
+4.  **Brand: DELL** (Weight: -0.03)
+5.  **Brand: GIGABYTE** (Weight: -0.005)
+
+
+
+---
+**Conclusion:** The model proves that while the GPU is the primary driver of cost, brand positioning (like LENOVO's aggressive pricing) plays a significant role in market valuation.
+
 
 ---
 
-## 🔮 Future Work
 
-- Build a price prediction model
-- Add feature importance analysis
-- Improve dashboard with filters (GPU, RAM, Price range)
-- Deploy the app online
 
 ---
 
